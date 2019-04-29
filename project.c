@@ -1,35 +1,26 @@
 #include <stdio.h>
 #include <time.h>
+#include <stdlib.h>
 #include <sys/time.h>
 #include <sys/resource.h>
 
+unsigned int n = 1000000;
+int i;
+struct timespec start, finish;
+long nseconds;
+int * results;
+int * test_array;
+unsigned int overhead;
+unsigned long int x;
+int count = 0;
 
-
-
-int main()
+unsigned long int get_cache_speed(unsigned int * array)
 {
-  printf("Start\n");
-  unsigned int n = 1000000;
-  int i;
-  int test_array[n];
-  unsigned int overhead;
-  int results[n];
   unsigned long int x;
-  int count = 0;
-  printf("Arrays allocated\n");
-
-  struct timespec start, finish;
-  long nseconds;
-
-  for (i = 0; i < n; i++)
-    test_array[i] = i * 2;
-
-  //TODO: create empty loop to factor out null loop
-  x = 0;
   clock_gettime(CLOCK_REALTIME, &start);
   for (i = 0; i < n; i++)
   {
-    //
+    //empty loop to calculate overhead
   }
   clock_gettime(CLOCK_REALTIME, &finish);
   overhead = finish.tv_nsec - start.tv_nsec;
@@ -39,27 +30,38 @@ int main()
   for (i = 0; i < n; i++)
   {
     clock_gettime(CLOCK_REALTIME, &start);
-
-    x = test_array[i];
+    x = test_array[n];
     clock_gettime(CLOCK_REALTIME, &finish);
     nseconds = finish.tv_nsec - start.tv_nsec;
     results[i] = nseconds;
   }
 
+  x = 0;
+  count = 0;
   for (i = 0; i < n; i++)
   {
-    if (results[i] < 100)
+    if (results[i] < 50)
     {
       x = x + results[i];
       count++;
     }
   }
-  printf("%ld\n", x);
-  printf("%d\n", count);
   x = x/count;
-  printf("%ld\n", x);
-  printf("Average time to access L1 cache: %ld nanoseconds\n", x - overhead);// overhead));
+  printf("Average time to access cache: %ld nanoseconds\n", x - overhead);
+  return x;
+}
 
+int main()
+{
+  printf("Start\n");
+  results = (int*) malloc(n * sizeof(int));
+  test_array = (int*) malloc(n * sizeof(int));
+
+
+  for (i = 0; i < n; i++)
+    test_array[i] = i * 2;
+  x = 0;
+  get_cache_speed(test_array);
   x = 0;
   for (i = 1; i < n; i++)
   {
