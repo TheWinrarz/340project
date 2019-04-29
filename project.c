@@ -14,7 +14,7 @@ unsigned int overhead;
 unsigned long int x;
 int count = 0;
 
-unsigned long int get_cache_speed(unsigned int * array)
+unsigned long int get_cache_speed()//unsigned int * array)
 {
   unsigned long int x;
   clock_gettime(CLOCK_REALTIME, &start);
@@ -51,6 +51,31 @@ unsigned long int get_cache_speed(unsigned int * array)
   return x;
 }
 
+
+int get_cache_size()
+{
+
+  x = 1;
+
+  for (i = 1; i < n; i++)
+  {
+    if (results[i]/results[i - 1] > 2 && results[i - 1] < 35)
+      x++;
+  }
+
+  x = n/x * sizeof(int);
+  printf("Estimated cache size: %ld bytes\n", x);
+  return 0;
+}
+
+int get_main_memory_speed()
+{
+}
+
+int get_cache_line_size()
+{
+}
+
 int main()
 {
   printf("Start\n");
@@ -61,14 +86,8 @@ int main()
   for (i = 0; i < n; i++)
     test_array[i] = i * 2;
   x = 0;
-  get_cache_speed(test_array);
-  x = 0;
-  for (i = 1; i < n; i++)
-  {
-    if (results[i]/results[i - 1] > 7 && results[i - 1] < 35)
-      x++;
-  }
-  printf("%ld\n", (n/x) * sizeof(int));
+  get_cache_speed();
+  get_cache_size();
 
 
   return 0;
