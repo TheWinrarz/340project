@@ -14,7 +14,7 @@ unsigned int overhead;
 unsigned long int x;
 int count = 0;
 
-unsigned long int get_cache_speed()//unsigned int * array)
+unsigned long int get_cache_speed()
 {
   unsigned long int x;
   clock_gettime(CLOCK_REALTIME, &start);
@@ -25,7 +25,7 @@ unsigned long int get_cache_speed()//unsigned int * array)
   clock_gettime(CLOCK_REALTIME, &finish);
   overhead = finish.tv_nsec - start.tv_nsec;
   overhead = overhead/n;
-  printf("Avg overhead: %d\n", overhead);
+  printf("Avg overhead: %d nanoseconds\n", overhead);
 
   for (i = 0; i < n; i++)
   {
@@ -70,6 +70,19 @@ int get_cache_size()
 
 int get_main_memory_speed()
 {
+  x = 0;
+  count = 0;
+  for (i = 0; i < n; i++)
+  {
+    if (results[i] > 100 && results[i] < 200)
+    {
+      x = x + results[i];
+      count++;
+    }
+  }
+  x = x/count;
+  printf("Average time to access memory: %ld nanoseconds\n", x);
+  return 0;
 }
 
 int get_cache_line_size()
@@ -88,6 +101,7 @@ int main()
   x = 0;
   get_cache_speed();
   get_cache_size();
+  get_main_memory_speed();
 
 
   return 0;
