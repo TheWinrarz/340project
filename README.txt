@@ -35,6 +35,11 @@ likely due to the fact that this was run on a virtualized system and there were 
 unforseen excesses.
 
 get_main_memory_speed():
+For this function, we do something similar to the implementation of get_cache_speed. This was more
+difficult however, because there were some numbers in the hundreds of thousands, and even in the
+millions of nanoseconds (on the scale of milliseconds, which seems way too long for memory access).
+For this, we decided to limit the upper scale of nanoseconds to 200. This gives a more reasonable
+answer, around 120 nanoseconds, but it also cuts out a lot of data points. 
 
 get_cache_size():
 For this function we again started by calculating the times it takes to access elements from a large array.
